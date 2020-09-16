@@ -1,0 +1,91 @@
+[package]
+authors = ["Freddy Wordingham <fjmw201@exeter.ac.uk>"]
+name = "mcrt"
+version = "0.1.0"
+description = "Monte-Carlo Radiative Transfer (MCRT) tool."
+repository = "https://github.com/FreddyWordingham/antler"
+readme = "README.md"
+keywords = ["physics", "mcrt", "rt"]
+categories = ["science", "simulation"]
+edition = "2018"
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/mcrt"
+
+[dependencies]
+# arctk = { path = "../arctk" }
+# arctk-attr = { path = "../arctk-attr" }
+# arctk-proc = { path = "../arctk-proc" }
+arctk = "0.10.*"
+arctk-attr = "0.1.*"
+arctk-proc = "0.1.*"
+# nalgebra = "0.22.*"
+# num_cpus = "1.13.*"
+# palette = "0.5.*"
+# rand = "0.7.*"
+# rayon = "1.4.*"
+serde = { version = "1.0.*", features = ["derive"] }
+
+[profile.dev]
+# Development profile: "cargo build".
+opt-level = 0
+debug = true
+rpath = false
+lto = false
+debug-assertions = true
+codegen-units = 16
+panic = 'unwind'
+incremental = true
+overflow-checks = true
+
+[profile.release]
+# Release profile: "cargo build --release"
+# # [DEV RELEASE]
+opt-level = 3
+debug = true
+rpath = false
+lto = false
+debug-assertions = true
+codegen-units = 16
+panic = "unwind"
+incremental = false
+overflow-checks = true
+
+# [profile.release]
+# # [RELEASE]
+# # Release profile: "cargo build --release"
+# opt-level = 3
+# debug = false
+# rpath = false
+# lto = "fat"
+# debug-assertions = false
+# codegen-units = 1
+# panic = "abort"
+# incremental = false
+# overflow-checks = false
+
+[profile.test]
+# Testing profile: "cargo test"
+opt-level = 0
+debug = 2
+rpath = false
+lto = false
+debug-assertions = true
+codegen-units = 16
+incremental = true
+overflow-checks = true
+
+[profile.bench]
+# Benchmark profile: "cargo bench" (and "cargo test --release)".
+opt-level = 3
+debug = false
+rpath = false
+lto = "fat"
+debug-assertions = false
+codegen-units = 1
+incremental = false
+overflow-checks = false
+
+[package.metadata.docs.rs]
+no-default-features = true
+default-target = "x86_64-apple-darwin"
+targets = ["x86_64-unknown-linux-gnu"]
