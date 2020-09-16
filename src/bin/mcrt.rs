@@ -37,7 +37,7 @@ struct Parameters {
 fn main() {
     let term_width = arctk::util::term::width().unwrap_or(80);
 
-    banner::title("RENDER", term_width);
+    banner::title("MCRT", term_width);
     let (params_path, in_dir, _out_dir) = init(term_width);
     let params = input(term_width, &in_dir, &params_path);
     let (
