@@ -21,8 +21,4 @@ pub struct Settings {
     pub roulette_barrels: u64,
     /// Initial material.
     pub init_mat: Key,
-    /// Wavelength limits.
-    pub range: Range,
-    /// Histogram resolution.
-    pub hist_bins: u64,
 }
