@@ -1,7 +1,5 @@
 //! MCRT binary.
 
-// use mcrt::{
-// };
 use arctk::{
     args,
     file::{
@@ -14,6 +12,7 @@ use arctk::{
     util::{banner, dir},
 };
 use arctk_attr::input;
+use mcrt::input::Settings;
 use std::{
     env::current_dir,
     path::{Path, PathBuf},
@@ -27,8 +26,8 @@ type Key = String;
 struct Parameters {
     /// Adaptive mesh settings.
     tree: TreeBuilder,
-    // /// MCRT runtime settings.
-    // sett: Settings,
+    /// MCRT runtime settings.
+    sett: Settings,
     /// Surfaces set.
     surfs: Set<Key, MeshBuilder>,
     // /// Attributes set.
@@ -43,7 +42,7 @@ fn main() {
     let params = input(term_width, &in_dir, &params_path);
     let (
         tree_sett,
-        // mcrt_sett,
+        _mcrt_sett,
         surfs,
         //  attrs
     ) = build(term_width, &in_dir, params);
@@ -96,7 +95,7 @@ fn build(
     params: Parameters,
 ) -> (
     TreeBuilder,
-    // Settings,
+    Settings,
     Set<Key, Mesh>,
     // Set<Key, Attributes>,
 ) {
@@ -104,8 +103,8 @@ fn build(
     banner::sub_section("Adaptive Tree Settings", term_width);
     let tree_sett = params.tree;
 
-    // banner::sub_section("MCRT Settings", term_width);
-    // let mcrt_sett = params.sett;
+    banner::sub_section("MCRT Settings", term_width);
+    let mcrt_sett = params.sett;
 
     banner::sub_section("Surfaces", term_width);
     let surfs = params
@@ -117,8 +116,7 @@ fn build(
     // let attrs = params.attrs;
 
     (
-        tree_sett, // mcrt_sett,
-        surfs,
+        tree_sett, mcrt_sett, surfs,
         // attrs,
     )
 }
