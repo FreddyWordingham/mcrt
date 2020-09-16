@@ -11,6 +11,15 @@
         max_depth: 8,
         padding: 0.01
     },
+    sett: {
+        block_size          : 10,
+        num_phot            : 1000,
+        bump_dist           : 1e-6,
+        loop_limit          : 1e6,
+        roulette_weight     : 1e-3,
+        roulette_barrels    : 8,
+        init_mat            : 'air',
+    },
     surfs: {
         plane       : [['objs/plane.obj'],     null],
         cube        : [['objs/cube.obj'],      null],

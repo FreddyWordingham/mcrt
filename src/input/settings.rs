@@ -1,7 +1,6 @@
 //! MCRT settings.
 
 use crate::parts::Key;
-use arctk::tools::Range;
 use arctk_attr::input;
 
 /// MCRT settings structure.
