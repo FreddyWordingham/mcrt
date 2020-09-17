@@ -2,7 +2,7 @@
 
 use arctk::{
     args,
-    file::{Build, Load},
+    file::{Build, Load, Save},
     geom::{Grid, GridBuilder, Mesh, MeshBuilder, Tree, TreeBuilder},
     ord::Set,
     util::{banner, dir},
@@ -10,7 +10,8 @@ use arctk::{
 use arctk_attr::input;
 use mcrt::{
     input::{Settings, Universe},
-    parts::{Attributes, Key, Material, MaterialBuilder},
+    parts::{Attributes, Key, Light, LightBuilder, Material, MaterialBuilder},
+    run::multi_thread,
 };
 use std::{
     env::current_dir,
@@ -32,24 +33,24 @@ struct Parameters {
     attrs: Set<Key, Attributes>,
     /// Materials set.
     mats: Set<Key, MaterialBuilder>,
+    /// Light form.
+    light: LightBuilder,
 }
 
 fn main() {
     let term_width = arctk::util::term::width().unwrap_or(80);
 
     banner::title("MCRT", term_width);
-    let (params_path, in_dir, _out_dir) = init(term_width);
+    let (params_path, in_dir, out_dir) = init(term_width);
     let params = input(term_width, &in_dir, &params_path);
-    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats) = build(term_width, &in_dir, params);
+    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats, light) =
+        build(term_width, &in_dir, params);
     let (tree, grid) = grow(term_width, tree_sett, grid_sett, &surfs);
-    let _input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
-    // banner::section("Shining", term_width);
-    // let output = multi_thread(&input, &shader, &cam).expect("Failed to perform rendering.");
-    // banner::section("Saving", term_width);
-    // output
-    //     .img
-    //     .save(&out_dir.join("render.png"))
-    //     .expect("Failed to save output data.");
+    let input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
+    banner::section("Shining", term_width);
+    let output = multi_thread(&input, &light).expect("Failed to perform rendering.");
+    banner::section("Saving", term_width);
+    output.save(&out_dir).expect("Failed to save output data.");
     banner::section("Finished", term_width);
 }
 
@@ -95,6 +96,7 @@ fn build(
     Set<Key, Mesh>,
     Set<Key, Attributes>,
     Set<Key, Material>,
+    Light,
 ) {
     banner::section("Building", term_width);
     banner::sub_section("Adaptive Tree Settings", term_width);
@@ -121,7 +123,10 @@ fn build(
         .build(in_dir)
         .expect("Failed to build materials.");
 
-    (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats)
+    banner::sub_section("Light", term_width);
+    let light = params.light.build(in_dir).expect("Failed to build light.");
+
+    (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats, light)
 }
 
 /// Grow domains.
