@@ -4,7 +4,7 @@
             mins: [-7,-7,-7],
             maxs: [ 7, 7, 7]
         },
-        res: [51,51,51]
+        res: [101,101,101]
     },
     tree: {
         tar_tris: 5,
@@ -12,8 +12,8 @@
         padding: 0.01
     },
     sett: {
-        block_size          : 10,
-        num_phot            : 1000,
+        block_size          : 1000,
+        num_phot            : 1e6,
         bump_dist           : 1e-6,
         loop_limit          : 1e6,
         roulette_weight     : 1e-3,
@@ -29,7 +29,7 @@
     attrs: {
         plane       : { Mirror:         {} },
         cube        : { Refractive:     { inside: 'fog',    outside: 'air'} },
-        cylinder    : { Refractive:     { inside: 'tumour', outside: 'fog'} },
+        cylinder    : { Refractive:     { inside: 'flesh', outside: 'fog'} },
         square      : { Spectrometer:   {}},
     },
     mats: {
@@ -47,7 +47,7 @@
     },
     light: {
         power       : 1.0,
-        surf        : [['objs/test/circle.obj'], null],
+        surf        : [['objs/circle.obj'], null],
         spec        : { Here: {Point: 6.3e-7}}
     }
 }

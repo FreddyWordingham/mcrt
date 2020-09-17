@@ -2,7 +2,7 @@
 
 use arctk::{
     args,
-    file::{Build, Load, Save},
+    file::{Build, Load, Redirect, Save},
     geom::{Grid, GridBuilder, Mesh, MeshBuilder, Tree, TreeBuilder},
     ord::Set,
     util::{banner, dir},
@@ -32,7 +32,7 @@ struct Parameters {
     /// Attributes set.
     attrs: Set<Key, Attributes>,
     /// Materials set.
-    mats: Set<Key, MaterialBuilder>,
+    mats: Set<Key, Redirect<MaterialBuilder>>,
     /// Light form.
     light: LightBuilder,
 }
@@ -120,6 +120,8 @@ fn build(
     banner::sub_section("Materials", term_width);
     let mats = params
         .mats
+        .build(in_dir)
+        .expect("Failed to remove redirections in materials.")
         .build(in_dir)
         .expect("Failed to build materials.");
 
