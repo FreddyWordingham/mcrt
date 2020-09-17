@@ -9,8 +9,7 @@ pub mod key;
 // pub mod material_builder;
 // pub mod photon;
 
-pub use self::attributes::*;
-pub use self::key::*;
+pub use self::{attributes::*, key::*};
 // pub use self::{
 // attributes::*,
 // light::*,

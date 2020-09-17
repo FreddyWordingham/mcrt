@@ -2,36 +2,34 @@
 
 use arctk::{
     args,
-    file::{
-        Build,
-        Load,
-        // Save
-    },
-    geom::{Mesh, MeshBuilder, Tree, TreeBuilder},
+    file::{Build, Load},
+    geom::{Grid, GridBuilder, Mesh, MeshBuilder, Tree, TreeBuilder},
     ord::Set,
     util::{banner, dir},
 };
 use arctk_attr::input;
-use mcrt::input::Settings;
+use mcrt::{
+    input::{Settings, Universe},
+    parts::{Attributes, Key},
+};
 use std::{
     env::current_dir,
     path::{Path, PathBuf},
 };
-
-/// Key type.
-type Key = String;
 
 /// Input parameters.
 #[input]
 struct Parameters {
     /// Adaptive mesh settings.
     tree: TreeBuilder,
+    /// Regular grid settings.
+    grid: GridBuilder,
     /// MCRT runtime settings.
     sett: Settings,
     /// Surfaces set.
     surfs: Set<Key, MeshBuilder>,
-    // /// Attributes set.
-    // attrs: Set<Key, Attributes>,
+    /// Attributes set.
+    attrs: Set<Key, Attributes>,
 }
 
 fn main() {
@@ -40,14 +38,9 @@ fn main() {
     banner::title("MCRT", term_width);
     let (params_path, in_dir, _out_dir) = init(term_width);
     let params = input(term_width, &in_dir, &params_path);
-    let (
-        tree_sett,
-        _mcrt_sett,
-        surfs,
-        //  attrs
-    ) = build(term_width, &in_dir, params);
-    let _tree = grow(term_width, tree_sett, &surfs);
-    // // let input = Scene::new(&tree, &mcrt_sett, &surfs, &attrs);
+    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs) = build(term_width, &in_dir, params);
+    let (tree, grid) = grow(term_width, tree_sett, grid_sett, &surfs);
+    let _input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs);
     // banner::section("Shining", term_width);
     // let output = multi_thread(&input, &shader, &cam).expect("Failed to perform rendering.");
     // banner::section("Saving", term_width);
@@ -95,13 +88,17 @@ fn build(
     params: Parameters,
 ) -> (
     TreeBuilder,
+    GridBuilder,
     Settings,
     Set<Key, Mesh>,
-    // Set<Key, Attributes>,
+    Set<Key, Attributes>,
 ) {
     banner::section("Building", term_width);
     banner::sub_section("Adaptive Tree Settings", term_width);
     let tree_sett = params.tree;
+
+    banner::sub_section("Grid Settings", term_width);
+    let grid_sett = params.grid;
 
     banner::sub_section("MCRT Settings", term_width);
     let mcrt_sett = params.sett;
@@ -112,21 +109,26 @@ fn build(
         .build(in_dir)
         .expect("Failed to build surfaces.");
 
-    // banner::sub_section("Attributes", term_width);
-    // let attrs = params.attrs;
+    banner::sub_section("Attributes", term_width);
+    let attrs = params.attrs;
 
-    (
-        tree_sett, mcrt_sett, surfs,
-        // attrs,
-    )
+    (tree_sett, grid_sett, mcrt_sett, surfs, attrs)
 }
 
 /// Grow domains.
-fn grow<'a>(term_width: usize, tree: TreeBuilder, surfs: &'a Set<Key, Mesh>) -> Tree<'a, &Key> {
+fn grow(
+    term_width: usize,
+    tree_sett: TreeBuilder,
+    grid_sett: GridBuilder,
+    surfs: &Set<Key, Mesh>,
+) -> (Tree<&Key>, Grid) {
     banner::section("Growing", term_width);
 
     banner::sub_section("Adaptive Tree", term_width);
-    let tree = tree.build(&surfs);
+    let tree = tree_sett.build(&surfs);
 
-    tree
+    banner::sub_section("Regular Grid", term_width);
+    let grid = grid_sett.build();
+
+    (tree, grid)
 }
