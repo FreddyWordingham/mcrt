@@ -20,6 +20,7 @@ arctk-attr = "0.1.*"
 arctk-proc = "0.1.*"
 ndarray = "0.13.*"
 num_cpus = "1.13.*"
+physical_constants = "0.3.*"
 rand = "0.7.*"
 rayon = "1.4.*"
 serde = { version = "1.0.*", features = ["derive"] }

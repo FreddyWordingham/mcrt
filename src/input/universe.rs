@@ -1,6 +1,9 @@
 //! Simulation input conglomerate.
 
-use crate::{input::Settings, parts::Attributes};
+use crate::{
+    input::Settings,
+    parts::{Attributes, Material},
+};
 use arctk::{
     geom::{Grid, Mesh, Tree},
     ord::Set,
@@ -18,8 +21,8 @@ pub struct Universe<'a, T: Ord> {
     pub surfs: &'a Set<T, Mesh>,
     /// Attributes.
     pub attrs: &'a Set<T, Attributes>,
-    // /// Materials.
-    // pub mats: &'a Set<T, Material>,
+    /// Materials.
+    pub mats: &'a Set<T, Material>,
 }
 
 impl<'a, T: Ord> Universe<'a, T> {
@@ -32,7 +35,7 @@ impl<'a, T: Ord> Universe<'a, T> {
         sett: &'a Settings,
         surfs: &'a Set<T, Mesh>,
         attrs: &'a Set<T, Attributes>,
-        // mats: &'a Set<T, Material>,
+        mats: &'a Set<T, Material>,
     ) -> Self {
         Self {
             tree,
@@ -40,7 +43,7 @@ impl<'a, T: Ord> Universe<'a, T> {
             sett,
             surfs,
             attrs,
-            // mats,
+            mats,
         }
     }
 }

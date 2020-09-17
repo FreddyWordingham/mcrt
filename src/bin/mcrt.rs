@@ -10,7 +10,7 @@ use arctk::{
 use arctk_attr::input;
 use mcrt::{
     input::{Settings, Universe},
-    parts::{Attributes, Key},
+    parts::{Attributes, Key, Material, MaterialBuilder},
 };
 use std::{
     env::current_dir,
@@ -30,6 +30,8 @@ struct Parameters {
     surfs: Set<Key, MeshBuilder>,
     /// Attributes set.
     attrs: Set<Key, Attributes>,
+    /// Materials set.
+    mats: Set<Key, MaterialBuilder>,
 }
 
 fn main() {
@@ -38,9 +40,9 @@ fn main() {
     banner::title("MCRT", term_width);
     let (params_path, in_dir, _out_dir) = init(term_width);
     let params = input(term_width, &in_dir, &params_path);
-    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs) = build(term_width, &in_dir, params);
+    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats) = build(term_width, &in_dir, params);
     let (tree, grid) = grow(term_width, tree_sett, grid_sett, &surfs);
-    let _input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs);
+    let _input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
     // banner::section("Shining", term_width);
     // let output = multi_thread(&input, &shader, &cam).expect("Failed to perform rendering.");
     // banner::section("Saving", term_width);
@@ -92,6 +94,7 @@ fn build(
     Settings,
     Set<Key, Mesh>,
     Set<Key, Attributes>,
+    Set<Key, Material>,
 ) {
     banner::section("Building", term_width);
     banner::sub_section("Adaptive Tree Settings", term_width);
@@ -112,7 +115,13 @@ fn build(
     banner::sub_section("Attributes", term_width);
     let attrs = params.attrs;
 
-    (tree_sett, grid_sett, mcrt_sett, surfs, attrs)
+    banner::sub_section("Materials", term_width);
+    let mats = params
+        .mats
+        .build(in_dir)
+        .expect("Failed to build materials.");
+
+    (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats)
 }
 
 /// Grow domains.
