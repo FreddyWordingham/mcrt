@@ -18,10 +18,10 @@ documentation = "https://docs.rs/mcrt"
 arctk = "0.10.*"
 arctk-attr = "0.1.*"
 arctk-proc = "0.1.*"
-# nalgebra = "0.22.*"
-# num_cpus = "1.13.*"
+ndarray = "0.13.*"
+num_cpus = "1.13.*"
 rand = "0.7.*"
-# rayon = "1.4.*"
+rayon = "1.4.*"
 serde = { version = "1.0.*", features = ["derive"] }
 
 [profile.dev]
