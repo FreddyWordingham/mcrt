@@ -9,7 +9,7 @@ keywords = ["physics", "mcrt", "rt"]
 categories = ["science", "simulation"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
-documentation = "https://docs.rs/mcrt"
+documentation = "https://freddywordingham.github.io/mcrt"
 
 [dependencies]
 # arctk = { path = "../arctk" }
