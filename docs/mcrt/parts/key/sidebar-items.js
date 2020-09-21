@@ -1,0 +1,1 @@
+initSidebarItems({"type":[["Key","Key type. Use strings for readability, integrals for speed."]]});
