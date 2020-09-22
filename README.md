@@ -3,7 +3,7 @@ Monte Carlo Radiative Transfer tool
 
 Input is the parameters file.
 Example parameters.json5:
-```json
+```json5
 {
     grid: {                                                                         // Output datacube settings.
         boundary: {                                                                 // Measurement region bounding box.
