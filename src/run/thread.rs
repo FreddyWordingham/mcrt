@@ -25,7 +25,7 @@ pub fn multi_thread(uni: &Universe<Key>, light: &Light) -> Result<Data, Error> {
         .par_iter()
         .map(|_id| thread(&Arc::clone(&pb), uni, light))
         .collect();
-    pb.lock()?.finish_with_message("Render complete.");
+    pb.lock()?.finish_with_message("Simulation complete.");
 
     let mut data = out.pop().expect("No data received.");
     while let Some(o) = out.pop() {
@@ -35,7 +35,7 @@ pub fn multi_thread(uni: &Universe<Key>, light: &Light) -> Result<Data, Error> {
     Ok(data)
 }
 
-/// Run and MCRT simulation using a single thread.
+/// Run a MCRT simulation using a single thread.
 #[allow(clippy::module_name_repetitions)]
 #[inline]
 #[must_use]
@@ -46,7 +46,7 @@ pub fn single_thread(uni: &Universe<Key>, light: &Light) -> Data {
     thread(&pb, uni, light)
 }
 
-/// Run and MCRT simulation using a single thread.
+/// Thread control function.
 #[allow(clippy::module_name_repetitions)]
 #[allow(clippy::expect_used)]
 #[inline]
