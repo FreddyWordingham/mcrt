@@ -1,6 +1,10 @@
 # mcrt
 Monte Carlo Radiative Transfer tool
 
+Library [![Build Status](https://travis-ci.org/FreddyWordingham/arctk.svg?branch=master)](https://travis-ci.org/FreddyWordingham/arctk)
+
+[Documentation](https://freddywordingham.github.io/mcrt)
+
 Input is the parameters file.
 Example parameters.json5:
 ```json5
