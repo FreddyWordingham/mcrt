@@ -1,4 +1,4 @@
 (function() {var implementors = {};
 implementors["arctk"] = [];
-implementors["mcrt"] = [{"text":"impl <a class=\"trait\" href=\"arctk/file/build/trait.Build.html\" title=\"trait arctk::file::build::Build\">Build</a> for <a class=\"struct\" href=\"mcrt/parts/light_builder/struct.LightBuilder.html\" title=\"struct mcrt::parts::light_builder::LightBuilder\">LightBuilder</a>","synthetic":false,"types":["mcrt::parts::light_builder::LightBuilder"]},{"text":"impl <a class=\"trait\" href=\"arctk/file/build/trait.Build.html\" title=\"trait arctk::file::build::Build\">Build</a> for <a class=\"struct\" href=\"mcrt/parts/material_builder/struct.MaterialBuilder.html\" title=\"struct mcrt::parts::material_builder::MaterialBuilder\">MaterialBuilder</a>","synthetic":false,"types":["mcrt::parts::material_builder::MaterialBuilder"]}];
+implementors["mcrt"] = [{"text":"impl Build for LightBuilder","synthetic":false,"types":[]},{"text":"impl Build for MaterialBuilder","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

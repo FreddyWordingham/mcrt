@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["File","Read only accessible file"],["MutableFile","Mutable access to file"]]});
+initSidebarItems({"struct":[["File","Read only accessible file"],["MutableFile","Mutable access to file"],["Options","Options for opening, creating, and appending files"]]});
