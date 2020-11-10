@@ -1,9 +1,11 @@
 # mcrt
 Monte Carlo Radiative Transfer tool
 
-Library [![Build Status](https://travis-ci.org/FreddyWordingham/arctk.svg?branch=master)](https://travis-ci.org/FreddyWordingham/arctk)
-
-[Documentation](https://freddywordingham.github.io/mcrt)
+[![ANTLER crate](https://img.shields.io/crates/v/arctk.svg)](https://crates.io/crates/mcrt)
+<!-- [![ANTLER documentation](https://docs.rs/mcrt/badge.svg)](https://docs.rs/mcrt) -->
+[![ANTLER documentation](https://docs.rs/mcrt/badge.svg)](https://freddywordingham.github.io/mcrt/)
+![minimum rustc 1.47](https://img.shields.io/badge/rustc-1.47+-red.svg)
+[![Build Status](https://travis-ci.org/FreddyWordingham/arctk.svg?branch=master)](https://travis-ci.org/FreddyWordingham/arctk)
 
 Input is the parameters file.
 Example parameters.json5:
