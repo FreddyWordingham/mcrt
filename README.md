@@ -4,7 +4,7 @@ Monte Carlo Radiative Transfer tool
 [![ANTLER crate](https://img.shields.io/crates/v/arctk.svg)](https://crates.io/crates/mcrt)
 <!-- [![ANTLER documentation](https://docs.rs/mcrt/badge.svg)](https://docs.rs/mcrt) -->
 [![ANTLER documentation](https://docs.rs/mcrt/badge.svg)](https://freddywordingham.github.io/mcrt/)
-![minimum rustc 1.47](https://img.shields.io/badge/rustc-1.47+-red.svg)
+[![minimum rustc 1.47](https://img.shields.io/badge/rustc-1.47+-red.svg)](https://www.rust-lang.org/)
 [![Build Status](https://travis-ci.org/FreddyWordingham/arctk.svg?branch=master)](https://travis-ci.org/FreddyWordingham/arctk)
 
 Input is the parameters file.
