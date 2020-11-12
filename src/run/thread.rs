@@ -73,7 +73,7 @@ pub fn thread(pb: &Arc<Mutex<ProgressBar>>, uni: &Universe<Key>, light: &Light) 
         for _i in start..end {
             let phot = light.emit(&mut rng, light.power() / uni.sett.num_phot as f64);
 
-            let sample = super::simulate_photon(uni, &mut rng, &mut data, phot);
+            let sample = super::engines::default(uni, &mut rng, &mut data, phot);
             data.escaped_weight += sample.remaining_weight;
         }
     }

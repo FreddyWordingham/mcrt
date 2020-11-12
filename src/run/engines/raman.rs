@@ -13,7 +13,7 @@ use std::f64::consts::PI;
 #[allow(clippy::expect_used)]
 #[inline]
 #[must_use]
-pub fn simulate_photon(
+pub fn another_simulate_photon(
     uni: &Universe<Key>,
     rng: &mut ThreadRng,
     data: &mut Data,

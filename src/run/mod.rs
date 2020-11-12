@@ -1,9 +1,9 @@
 //! Running.
 
-pub mod engine;
+pub mod engines;
 pub mod event;
 pub mod thread;
 
-pub use self::engine::*;
+pub use self::engines::*;
 pub use self::event::*;
 pub use self::thread::*;

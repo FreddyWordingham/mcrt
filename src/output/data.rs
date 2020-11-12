@@ -30,6 +30,9 @@ pub struct Data {
     pub absorptions: Array3<f64>,
     /// Local photo-shifts [J].
     pub shifts: Array3<f64>,
+
+    /// Total Raman weight
+    pub total_raman_weight: f64,
 }
 
 impl Data {
@@ -55,6 +58,8 @@ impl Data {
             energy: Array3::zeros(res),
             absorptions: Array3::zeros(res),
             shifts: Array3::zeros(res),
+
+            total_raman_weight: 0.0,
         }
     }
 }
@@ -67,6 +72,8 @@ impl AddAssign<&Self> for Data {
         self.energy += &rhs.energy;
         self.absorptions += &rhs.absorptions;
         self.shifts += &rhs.shifts;
+
+        self.total_raman_weight += rhs.total_raman_weight;
     }
 }
 
@@ -91,6 +98,9 @@ impl Save for Data {
 
         let path = out_dir.join("shift_density.nc");
         println!("Saving: {}", path.display());
-        (&self.shifts / self.cell_vol).save(&path)
+        (&self.shifts / self.cell_vol).save(&path)?;
+
+        println!("Total Raman weight: {}", self.total_raman_weight);
+        Ok(())
     }
 }
