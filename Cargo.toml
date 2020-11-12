@@ -13,10 +13,10 @@ documentation = "https://freddywordingham.github.io/mcrt"
 exclude = ["docs/"]
 
 [dependencies]
-# arctk = { path = "../arctk" }
+arctk = { path = "../arctk", features = ["terminal_size", "netcdf"] }
 # arctk-attr = { path = "../arctk-attr" }
 # arctk-proc = { path = "../arctk-proc" }
-arctk = { version = "0.11.*", features = ["terminal_size", "netcdf"] }
+# arctk = { version = "0.11.7", features = ["terminal_size", "netcdf"] }
 arctk-attr = "0.2.*"
 arctk-proc = "0.2.*"
 ndarray = "0.13.*"

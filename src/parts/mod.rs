@@ -1,6 +1,8 @@
 //! Simulation components.
 
 pub mod attributes;
+pub mod emitter;
+pub mod emitter_builder;
 pub mod key;
 pub mod light;
 pub mod light_builder;
@@ -10,6 +12,6 @@ pub mod material_builder;
 pub mod photon;
 
 pub use self::{
-    attributes::*, key::*, light::*, light_builder::*, local::*, material::*, material_builder::*,
-    photon::*,
+    attributes::*, emitter::*, emitter_builder::*, key::*, light::*, light_builder::*, local::*,
+    material::*, material_builder::*, photon::*,
 };

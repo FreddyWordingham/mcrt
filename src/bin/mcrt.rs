@@ -39,18 +39,25 @@ struct Parameters {
 
 fn main() {
     let term_width = arctk::util::term::width().unwrap_or(80);
-
     banner::title("MCRT", term_width);
+
     let (params_path, in_dir, out_dir) = init(term_width);
+
     let params = input(term_width, &in_dir, &params_path);
+
     let (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats, light) =
         build(term_width, &in_dir, params);
+
     let (tree, grid) = grow(term_width, tree_sett, grid_sett, &surfs);
-    let input = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
+
+    let uni = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
+
     banner::section("Shining", term_width);
-    let output = multi_thread(&input, &light).expect("Failed to perform rendering.");
+    let output = multi_thread(&uni, &light).expect("Failed to perform rendering.");
+
     banner::section("Saving", term_width);
     output.save(&out_dir).expect("Failed to save output data.");
+
     banner::section("Finished", term_width);
 }
 
