@@ -1,157 +1,55 @@
-//! MCRT binary.
+//! Monte-Carlo radiative transfer simulation binary.
+//! Compute the radiative field for a given set of setup and light source.
 
 use arctk::{
     args,
-    file::{Build, Load, Redirect, Save},
-    geom::{Grid, GridBuilder, Mesh, MeshBuilder, Tree, TreeBuilder},
-    ord::Set,
-    util::{banner, dir},
+    file::{Build, Load, Save},
+    geom::Tree,
+    ord::Link,
+    sim::mcrt::{multi_thread, Input, ParametersBuilder},
+    util::{
+        banner::{section, title},
+        dir,
+    },
 };
-use arctk_attr::input;
-use mcrt::{
-    input::{Settings, Universe},
-    parts::{Attributes, Key, Light, LightBuilder, Material, MaterialBuilder},
-    run::multi_thread,
-};
-use std::{
-    env::current_dir,
-    path::{Path, PathBuf},
-};
-
-/// Input parameters.
-#[input]
-struct Parameters {
-    /// Adaptive mesh settings.
-    tree: TreeBuilder,
-    /// Regular grid settings.
-    grid: GridBuilder,
-    /// MCRT runtime settings.
-    sett: Settings,
-    /// Surfaces set.
-    surfs: Set<Key, MeshBuilder>,
-    /// Attributes set.
-    attrs: Set<Key, Attributes>,
-    /// Materials set.
-    mats: Set<Key, Redirect<MaterialBuilder>>,
-    /// Light form.
-    light: LightBuilder,
-}
+use std::{env::current_dir, path::PathBuf};
 
 fn main() {
     let term_width = arctk::util::term::width().unwrap_or(80);
-    banner::title("MCRT", term_width);
+    title(term_width, "MCRT");
 
-    let (params_path, in_dir, out_dir) = init(term_width);
-
-    let params = input(term_width, &in_dir, &params_path);
-
-    let (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats, light) =
-        build(term_width, &in_dir, params);
-
-    let (tree, grid) = grow(term_width, tree_sett, grid_sett, &surfs);
-
-    let uni = Universe::new(&tree, &grid, &mcrt_sett, &surfs, &attrs, &mats);
-
-    banner::section("Shining", term_width);
-    let output = multi_thread(&uni, &light).expect("Failed to perform rendering.");
-
-    banner::section("Saving", term_width);
-    output.save(&out_dir).expect("Failed to save output data.");
-
-    banner::section("Finished", term_width);
-}
-
-/// Initialise the command line arguments and directories.
-fn init(term_width: usize) -> (PathBuf, PathBuf, PathBuf) {
-    banner::section("Initialisation", term_width);
-    banner::sub_section("Command line arguments", term_width);
+    section(term_width, "Initialisation");
     args!(bin_path: PathBuf;
         params_path: PathBuf
     );
-    println!("{:>32} : {}", "binary path", bin_path.display());
-    println!("{:>32} : {}", "parameters path", params_path.display());
-
-    banner::sub_section("Directories", term_width);
     let cwd = current_dir().expect("Failed to determine current working directory.");
     let (in_dir, out_dir) = dir::io_dirs(Some(cwd.join("input")), Some(cwd.join("output")))
         .expect("Failed to initialise directories.");
-    println!("{:>32} : {}", "input directory", in_dir.display());
-    println!("{:>32} : {}", "output directory", out_dir.display());
 
-    (params_path, in_dir, out_dir)
-}
+    section(term_width, "Input");
+    let builder = ParametersBuilder::load(&in_dir.join(params_path))
+        .expect("Failed to load parameters file.");
 
-/// Load the input files.
-fn input(term_width: usize, in_dir: &Path, params_path: &Path) -> Parameters {
-    banner::section("Input", term_width);
-    banner::sub_section("Parameters", term_width);
-    let path = in_dir.join(params_path);
+    section(term_width, "Building");
+    let setup = builder
+        .build(&in_dir)
+        .expect("Failed to construct builder structure.");
 
-    Parameters::load(&path).expect("Failed to load parameters file.")
-}
+    section(term_width, "Linking");
+    let mats = setup.mats;
+    let attrs = setup.attrs.link(&mats).expect("Material link failure.");
+    let surfs = setup.surfs.link(&attrs).expect("Surface link failure.");
+    let light = setup.light;
+    let tree = Tree::new(&setup.tree, &surfs);
+    let grid = setup.grid;
+    let sett = setup.sett.link(&mats).expect("Material link Failure.");
+    let engine = setup.engine;
+    let input = Input::new(&mats, &attrs, &light, &tree, &grid, &sett);
 
-/// Build instances.
-#[allow(clippy::type_complexity)]
-fn build(
-    term_width: usize,
-    in_dir: &Path,
-    params: Parameters,
-) -> (
-    TreeBuilder,
-    GridBuilder,
-    Settings,
-    Set<Key, Mesh>,
-    Set<Key, Attributes>,
-    Set<Key, Material>,
-    Light,
-) {
-    banner::section("Building", term_width);
-    banner::sub_section("Adaptive Tree Settings", term_width);
-    let tree_sett = params.tree;
+    section(term_width, "Simulation");
+    // let output = single_thread(engine, &input).expect("Failed to run simulation");
+    let output = multi_thread(engine, &input).expect("Failed to run simulation");
+    output.save(&out_dir).expect("Failed to save output data.");
 
-    banner::sub_section("Grid Settings", term_width);
-    let grid_sett = params.grid;
-
-    banner::sub_section("MCRT Settings", term_width);
-    let mcrt_sett = params.sett;
-
-    banner::sub_section("Surfaces", term_width);
-    let surfs = params
-        .surfs
-        .build(in_dir)
-        .expect("Failed to build surfaces.");
-
-    banner::sub_section("Attributes", term_width);
-    let attrs = params.attrs;
-
-    banner::sub_section("Materials", term_width);
-    let mats = params
-        .mats
-        .build(in_dir)
-        .expect("Failed to remove redirections in materials.")
-        .build(in_dir)
-        .expect("Failed to build materials.");
-
-    banner::sub_section("Light", term_width);
-    let light = params.light.build(in_dir).expect("Failed to build light.");
-
-    (tree_sett, grid_sett, mcrt_sett, surfs, attrs, mats, light)
-}
-
-/// Grow domains.
-fn grow(
-    term_width: usize,
-    tree_sett: TreeBuilder,
-    grid_sett: GridBuilder,
-    surfs: &Set<Key, Mesh>,
-) -> (Tree<&Key>, Grid) {
-    banner::section("Growing", term_width);
-
-    banner::sub_section("Adaptive Tree", term_width);
-    let tree = tree_sett.build(&surfs);
-
-    banner::sub_section("Regular Grid", term_width);
-    let grid = grid_sett.build();
-
-    (tree, grid)
+    section(term_width, "Finished");
 }
