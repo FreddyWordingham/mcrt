@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["attributes","Attributes implementation."],["key","Keying type."],["light","Light surface structure."],["light_builder","Light surface structure."],["local","Local optical environment implementation."],["material","Optical material."],["material_builder","Material builder."],["photon","Photon particle."]]});

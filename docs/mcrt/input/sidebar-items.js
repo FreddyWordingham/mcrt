@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["settings","MCRT settings."],["universe","Simulation input conglomerate."]]});
