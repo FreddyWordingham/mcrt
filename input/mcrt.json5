@@ -27,7 +27,7 @@
     }},
     surfs   : { Here    : {
             centrepiece : {
-                mesh    : [["objs/cube.obj"], null],
+                mesh    : [["objs/cube.obj"], {scale:1.1}],
                 attr    : 'fog'
             },
             mirror      : {
