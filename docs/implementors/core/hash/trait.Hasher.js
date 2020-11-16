@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["siphasher"] = [{"text":"impl Hasher for SipHasher","synthetic":false,"types":[]},{"text":"impl Hasher for SipHasher13","synthetic":false,"types":[]},{"text":"impl Hasher for SipHasher24","synthetic":false,"types":[]},{"text":"impl Hasher for SipHasher","synthetic":false,"types":[]},{"text":"impl Hasher for SipHasher13","synthetic":false,"types":[]},{"text":"impl Hasher for SipHasher24","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
